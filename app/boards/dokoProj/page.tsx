@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Boards() {
+export default function DokoProj() {
   return (
     <>
       <nav>

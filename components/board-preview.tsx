@@ -23,7 +23,7 @@ export function BoardPreview({ details }: { details: Detail[] }) {
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Project</TableHead>
+          <TableHead className="fill">Project</TableHead>
           <TableHead>Last Updated</TableHead>
           <TableHead>Tasks Remaining</TableHead>
           <TableHead className="text-right">Total Projects</TableHead>
@@ -32,7 +32,13 @@ export function BoardPreview({ details }: { details: Detail[] }) {
       <TableBody>
         {details.map((details) => (
           <TableRow key={details.project}>
-            <TableCell className="font-medium">{details.project}</TableCell>
+            <TableCell className="font-medium">
+              <Link href={`boards/${details.project}`} className="w-full">
+              <Button asChild variant="outline" className="wrap p-0" key={details.project}></Button>
+              {details.project}
+              </Link>
+              
+            </TableCell>
             <TableCell>{details.lastUpdated}</TableCell>
             <TableCell>{details.tasks}</TableCell>
             <TableCell className="text-right">1</TableCell>
