@@ -25,7 +25,7 @@ func main() {
 	cfg.Passwd = os.Getenv("DBPASS")
 	cfg.Net = "tcp"
 	cfg.Addr = "classmysql.engr.oregonstate.edu:3306"
-	cfg.DBName = "cs340_paynesax"
+	cfg.DBName = os.Getenv("DBName")
 
 	// Get a database handle.
 	db, err = sql.Open("mysql", cfg.FormatDSN())
