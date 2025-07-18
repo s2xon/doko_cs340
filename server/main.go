@@ -61,5 +61,6 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/users/{userId}/boards", handlers.HandleGetBoards).Methods("GET")
+	r.HandleFunc("/users/{userId}/board/{boardId}", handlers.HandleGetBoardInfo).Methods("GET")
 	http.ListenAndServe(":8000", r)
 }

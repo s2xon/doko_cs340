@@ -13,19 +13,19 @@ type Boards struct {
 }
 
 type Statuses struct {
-	statId int `json:"statId"`
-	title string `json:"title"`
+	StatId int `json:"statId"`
+	Title string `json:"title"`
 	BoardId int `json:"BoardId"`
 }
 
 type Tasks struct {
-	taskId int `json:"taskId"`
-	title string `json:"title"`
-	desc string `json:"desc"`
-	statId int `json:"statId"`
+	TaskId int `json:"taskId"`
+	Title string `json:"title"`
+	Desc string `json:"desc"`
+	StatId int `json:"statId"`
 }
 
 type TaskTags struct {
-	taskId int `json:"taskId"`
-	tagId int `json:"tagId"`
+	TaskId int `json:"taskId"`
+	TagId int `json:"tagId"`
 }
