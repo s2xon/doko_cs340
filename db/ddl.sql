@@ -8,7 +8,8 @@ DROP TABLE IF EXISTS Users;
 
 -- Users
 CREATE TABLE Users (
-    userId INT AUTO_INCREMENT PRIMARY KEY
+    userId INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
 );
 
 -- Boards
@@ -58,7 +59,7 @@ CREATE TABLE TaskTags (
 );
 
 -- Insert sample users
-INSERT INTO Users VALUES (), (), ();
+INSERT INTO Users (name) VALUES ('Saxon'), ('Matthew'), ('Jim');
 
 -- Insert sample boards
 INSERT INTO Boards (title, userId) VALUES
