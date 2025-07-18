@@ -2,15 +2,19 @@ package main
 
 import (
 	"database/sql"
+	"net/http"
 	"fmt"
 	"log"
 	"os"
+	"root/store"
+	"root/api"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	"github.com/gorilla/mux"
 )
 
-var db *sql.DB
+// var db *sql.DB
 
 func main() {
 
@@ -24,22 +28,22 @@ func main() {
 	cfg.User = os.Getenv("DBUSER")
 	cfg.Passwd = os.Getenv("DBPASS")
 	cfg.Net = "tcp"
-	cfg.Addr = "classmysql.engr.oregonstate.edu:3306"
+	cfg.Addr = "localhost:3306"
 	cfg.DBName = os.Getenv("DBNAME")
 
 	// Get a database handle.
 	fmt.Println(cfg.FormatDSN())
-	db, err = sql.Open("mysql", cfg.FormatDSN())
+	store.DB, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pingErr := db.Ping()
+	pingErr := store.DB.Ping()
 	if pingErr != nil {
 		log.Fatal(pingErr)
 	}
 	fmt.Println("Connected!")
-	rows, err := db.Query("SELECT * FROM Users;")
+	rows, err := store.DB.Query("SELECT * FROM Users;")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,4 +58,8 @@ func main() {
 		fmt.Println(id, name)
 
 	}
+
+	r := mux.NewRouter()
+	r.HandleFunc("/users/{userId}/boards", handlers.HandleGetBoards).Methods("GET")
+	http.ListenAndServe(":8000", r)
 }

@@ -8,8 +8,8 @@ type Users struct {
 
 type Boards struct {
 	BoardId int `json:"BoardId"`
-	title string `json:"title"`
-	userId int `json:"userId"`
+	Title string `json:"title"`
+	UserId int `json:"userId"`
 }
 
 type Statuses struct {
@@ -25,7 +25,7 @@ type Tasks struct {
 	statId int `json:"statId"`
 }
 
-type Tasks struct {
+type TaskTags struct {
 	taskId int `json:"taskId"`
 	tagId int `json:"tagId"`
 }
