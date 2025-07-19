@@ -70,7 +70,14 @@ func HandleGetBoardInfo(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    tags, err := queries.GetTags(store.DB, userID, boardID)
+    if err != nil {
+        http.Error(w, "Error fetching statuses", http.StatusInternalServerError)
+        return
+    }
+
     // might have to format differently to parse better when we populate UI
     json.NewEncoder(w).Encode(statuses)
     json.NewEncoder(w).Encode(tasks)
+    json.NewEncoder(w).Encode(tags)
 }
