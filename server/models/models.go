@@ -1,37 +1,37 @@
 package models
 
 type Users struct {
-	UserId int `json:"userId"`
-	name string `json:"name"`
-
+	UserId int    `json:"userId"`
+	Name   string `json:"name"`
 }
 
 type Boards struct {
-	BoardId int `json:"BoardId"`
-	Title string `json:"title"`
-	UserId int `json:"userId"`
+	BoardId int    `json:"BoardId"`
+	Title   string `json:"title"`
+	UserId  int    `json:"userId"`
 }
 
 type Statuses struct {
-	StatId int `json:"statId"`
-	Title string `json:"title"`
-	BoardId int `json:"boardId"`
+	StatId  int    `json:"statId"`
+	Title   string `json:"title"`
+	BoardId int    `json:"boardId"`
 }
 
 type Tasks struct {
-	TaskId int `json:"taskId"`
-	Title string `json:"title"`
-	Desc string `json:"desc"`
-	StatId int `json:"statId"`
+	TaskId int    `json:"taskId"`
+	Title  string `json:"title"`
+	Desc   string `json:"desc"`
+	StatId int    `json:"statId"`
 }
 
 type Tags struct {
-	TagId int `json:"tagId"`
+	TagId int    `json:"tagId"`
 	Title string `json:"title"`
 	Color string `json:"color"`
 }
 
 type TaskTags struct {
 	TaskId int `json:"taskId"`
-	TagId int `json:"tagId"`
+	TagId  int `json:"tagId"`
 }
+
