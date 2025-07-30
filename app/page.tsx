@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BoardPreview } from "@/components/board-preview";
+import { CreateBoardsData } from "@/components/load-board-list";
 const details = [
   {
     project: "dokoProj",
@@ -21,7 +22,7 @@ export default function Home() {
       </nav>
       <section className="p-12">
         {" "}
-        <BoardPreview details={details} />
+        <CreateBoardsData userId={1} />
       </section>
     </>
   );

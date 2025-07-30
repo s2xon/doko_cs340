@@ -20,7 +20,7 @@ type Detail = {
 export function BoardPreview({ details }: { details: Detail[] }) {
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your Boards.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="fill">Project</TableHead>

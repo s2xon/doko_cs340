@@ -14,6 +14,7 @@ import (
 	"github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 )
 
 // var db *sql.DB
@@ -75,6 +76,13 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// middleware to access the DB properly via the frontend
+	c := cors.New(cors.Options{
+	AllowedOrigins: []string{"http://localhost:3000"}, // Replace with osu url if needed - Matt
+	AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	AllowedHeaders: []string{"Content-Type", "Authorization"},
+	Debug: true,
+	})
 
 	var err error
 	err = godotenv.Load()
@@ -124,5 +132,7 @@ func main() {
 
 	r.HandleFunc("/users/auth", AuthHandler).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":8010", r))
+	handlerWithCORS := c.Handler(r)
+
+	log.Fatal(http.ListenAndServe(":8010", handlerWithCORS))
 }
