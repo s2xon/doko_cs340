@@ -73,6 +73,8 @@ INSERT INTO Users (name) VALUES ('Saxon'), ('Matthew'), ('Jim');
 -- Insert sample boards
 INSERT INTO Boards (title, userId) VALUES
 ('Work Projects', 1),
+('School Projects', 1),
+('Hobbies', 1),
 ('Personal Goals', 2),
 ('School Assignments', 3);
 
