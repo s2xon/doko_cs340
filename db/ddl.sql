@@ -82,7 +82,13 @@ INSERT INTO Boards (title, userId) VALUES
 INSERT INTO Statuses (title, boardId) VALUES
 ('To Do', 1),
 ('In Progress', 1),
-('Done', 1);
+('Done', 1),
+('To Do', 2),
+('In Progress', 2),
+('Done', 2),
+('To Do', 3),
+('In Progress', 3),
+('Done', 3);
 
 -- Insert sample tasks
 INSERT INTO Tasks (title, `desc`, statId) VALUES

@@ -40,3 +40,9 @@ type TaskTags struct {
 	TagId  int `json:"tagId"`
 }
 
+type BoardData struct {
+		AllStatuses []Statuses `json:"allStatuses`
+		AllTasks []Tasks `json:"allTasks`
+		AllTags []Tags `json:"allTags`
+}
+

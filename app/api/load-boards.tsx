@@ -15,7 +15,30 @@ export async function getBoards (userId: number){
         // See main.go for server info and available queries
         const response = await fetch(`${SERVER}/users/${userId}/boards`);
         if (!response.ok) {
-            // nuke iran
+            throw new Error (`HTTP response. Status: ${response.status}`);
+        }
+        const boardData = await response.json();
+        // console.log(boardData);
+        return boardData;
+
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        throw error; 
+    }
+
+
+}
+
+
+// Same code as above, just handing for loading all board data.
+// See server/main.go, server/api/board.go, server/queries/board.go
+// for its route grab the data from the db.
+export async function getBoardData (userId: number, BoardId: number){
+    console.log(userId, BoardId);
+    try {
+        // See main.go for server info and available queries
+        const response = await fetch(`${SERVER}/users/${userId}/board/${BoardId}`);
+        if (!response.ok) {
             throw new Error (`HTTP response. Status: ${response.status}`);
         }
         const boardData = await response.json();

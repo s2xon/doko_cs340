@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import React, { useState, useEffect } from 'react';
 import { getBoards } from '@/app/api/load-boards'; // Import the API function
+import { Board } from '@/components/interfaces';
 
 /* 
 Sources:
@@ -31,11 +32,11 @@ Sources:
 // to the dokoProj page in order for it to load the correct data.
 
 
-interface Board {
-  BoardId: number;
-  title: string;
-  userId: string;
-}
+// interface Board {
+//   BoardId: number;
+//   title: string;
+//   userId: string;
+// }
 
 export function CreateBoardsData ({ userId }: { userId: number }) {
     // State variables, starts with Loading as true.
