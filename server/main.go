@@ -76,9 +76,10 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// middleware to access the DB properly via the frontend
+	// middleware to access the DB properly via the frontend.
+	// Specifies perameters for accessing api calls to DB.
 	c := cors.New(cors.Options{
-	AllowedOrigins: []string{"http://localhost:3000"}, // Replace with osu url if needed - Matt
+	AllowedOrigins: []string{"http://localhost:3000"}, // Replace with osu url if needed
 	AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 	AllowedHeaders: []string{"Content-Type", "Authorization"},
 	Debug: true,
@@ -90,6 +91,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	// Capture connection properties.
+	// Modify the ".env" file with db credentials to access.
 	cfg := mysql.NewConfig()
 	cfg.User = os.Getenv("DBUSER")
 	cfg.Passwd = os.Getenv("DBPASS")
@@ -104,6 +106,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// The following code is just testing the connection, along with a test SELECT.
 	pingErr := store.DB.Ping()
 	if pingErr != nil {
 		log.Fatal(pingErr)
@@ -125,14 +128,18 @@ func main() {
 
 	}
 
+	// Router for all the api calls
 	r := mux.NewRouter()
 
-	r.HandleFunc("/users/{userId}/boards", handlers.HandleGetBoards).Methods("GET")
-	r.HandleFunc("/users/{userId}/board/{boardId}", handlers.HandleGetBoardInfo).Methods("GET")
+	// Each type of call (i.e. get with the URL) is directed to the correlated handler function in "/api" directory
+	r.HandleFunc("/users/{userId}/boards", handlers.HandleGetBoards).Methods("GET") // in /api/board.go
+	r.HandleFunc("/users/{userId}/board/{boardId}", handlers.HandleGetBoardInfo).Methods("GET") // in /api/board.go
 
-	r.HandleFunc("/users/auth", AuthHandler).Methods("POST")
+	r.HandleFunc("/users/auth", AuthHandler).Methods("POST") // uses function above main() to handle.
 
+	// Specifying that the rounter will be handled with CORS middleware.
 	handlerWithCORS := c.Handler(r)
 
+	// Middleware serves from port 8010, logs failure.
 	log.Fatal(http.ListenAndServe(":8010", handlerWithCORS))
 }

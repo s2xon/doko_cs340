@@ -21,6 +21,10 @@ all of them in this handler.
 After this we need to implement react code to api call this to
 load the board info, then toss it into the UI appropriately.
 */
+
+/*
+Function for handling "/users/{userId}/boards" GET request.
+*/
 func HandleGetBoards(w http.ResponseWriter, r *http.Request) {
     userIDStr := mux.Vars(r)["userId"]
     userID, err := strconv.Atoi(userIDStr)
@@ -29,17 +33,25 @@ func HandleGetBoards(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    boards, err := queries.GetBoardsByUserID(store.DB, userID)
+    // See "/queries/board.go" for the db query function.
+    boards, err := queries.GetBoardsByUserID(store.DB, userID) 
     if err != nil {
         http.Error(w, "Error fetching boards", http.StatusInternalServerError)
         return
     }
 
-    json.NewEncoder(w).Encode(boards)
+    json.NewEncoder(w).Encode(boards) // return query response (w)
 }
 
+/*
+Function for handling "/users/{userId}/board/{boardId}" GET request.
+The goal of this is to be able to populate the relevant board when clicking it from the Boards list.
+*/
 func HandleGetBoardInfo(w http.ResponseWriter, r *http.Request) {
-        userIDStr := mux.Vars(r)["userId"]
+
+    // This request has bout userId and boardId from URL input to parse. 
+
+    userIDStr := mux.Vars(r)["userId"]
     userID, err := strconv.Atoi(userIDStr)
     if err != nil {
         http.Error(w, "Invalid user ID", http.StatusBadRequest)
@@ -54,15 +66,14 @@ func HandleGetBoardInfo(w http.ResponseWriter, r *http.Request) {
     }
 
     
-    // Query for a boards statuses
+    // The following code queries all the handler functions for Board Status, Tasks, and Tags.
+
     statuses, err := queries.GetBoardStatus(store.DB, userID, boardID)
     if err != nil {
         http.Error(w, "Error fetching statuses", http.StatusInternalServerError)
         return
     }
 
-
-    // Cont. adding more board info here
 
     tasks, err := queries.GetTasks(store.DB, userID, boardID)
     if err != nil {
@@ -76,7 +87,7 @@ func HandleGetBoardInfo(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // might have to format differently to parse better when we populate UI
+    // Note: might have to format differently to parse better when we populate UI
     json.NewEncoder(w).Encode(statuses)
     json.NewEncoder(w).Encode(tasks)
     json.NewEncoder(w).Encode(tags)

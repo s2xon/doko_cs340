@@ -1,5 +1,10 @@
 package models
 
+/* 
+Models help direct the returned data from the DB (in the queries directory)
+
+*/
+
 type Users struct {
 	UserId int    `json:"userId"`
 	Name   string `json:"name"`
