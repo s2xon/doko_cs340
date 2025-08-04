@@ -8,6 +8,9 @@ import {
     Tags,
     BoardData,
  } from '@/components/interfaces';
+ import {
+    StatusColumn
+ } from '@/components/ui/columns'
 /* 
 Sources:
 - https://www.convex.dev/typescript/optimization/typescript-catch-error-type
@@ -23,7 +26,6 @@ interface LoadBoardInput {
 
 export function LoadBoard ({userId, BoardId} : LoadBoardInput) {
     // State variables, starts with Loading as true.
-
     const [board, setBoard] = useState<BoardData | null>(null); // set to empty array
     const [loading, setLoading] = useState(true);
     // have to explicitely define the state as either Error or null (bc of ts)
@@ -55,22 +57,17 @@ export function LoadBoard ({userId, BoardId} : LoadBoardInput) {
     if (!board) return <div>No board data found.</div>;
 
     return (
-        <div>
+
+        <div className="flex flex-col md:flex-row justify-center items-start gap-8">
+        {/* Render a StatusColumn for each defined status */}
         {board.AllStatuses.map(status => (
-
-        <div key={status.statId}>
-          <h2>{status.title}</h2>
-          <ul>
-            {board.AllTasks
-              .filter(task => task.statId === status.statId)
-              .map(task => (
-                <li key={task.taskId}>
-                  {task.title} - {task.desc}
-                </li>
-              ))}
-          </ul>
-        </div>
-
+            <StatusColumn
+                key={status.statId}
+                StatusId={status.statId}
+                StatusTitle={status.title}
+                RelevantTasks={board.AllTasks
+                .filter(task => task.statId === status.statId)} // Filter tasks for the current status
+            />
         ))}
         </div>
     )
