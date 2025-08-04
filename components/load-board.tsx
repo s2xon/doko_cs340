@@ -58,8 +58,7 @@ export function LoadBoard ({userId, BoardId} : LoadBoardInput) {
 
     return (
 
-        <div className="flex flex-col md:flex-row justify-center items-start gap-8">
-        {/* Render a StatusColumn for each defined status */}
+        <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 min-h-screen">
         {board.AllStatuses.map(status => (
             <StatusColumn
                 key={status.statId}

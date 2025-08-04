@@ -27,7 +27,7 @@ interface StatusVars {
 
 function StatusColumn ({StatusId, StatusTitle, RelevantTasks} : StatusVars) {
     return (
-        <div className="w-full md:w-1/3 bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col items-center transform transition-all duration-300 hover:scale-105">
+        <div className="w-full md:w-1/3 bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col items-center transform transition-all duration-300">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-grey-400 pb-2 w-full text-center">
             {StatusTitle}
             </h2>
