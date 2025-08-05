@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {LoadBoard} from "@/components/load-board"
+import {BoardProvider} from '@/components/context'
 
 
 
@@ -21,8 +22,9 @@ export default async function DokoProj({ params }: DokoProjProps) {
         </h1>
       </nav>
       <section>
-      <LoadBoard userId={1} BoardId={BoardId}/>
-
+      <BoardProvider userId={1} BoardId={BoardId}>
+      <LoadBoard/>
+      </BoardProvider>
       </section>
     </>
   );

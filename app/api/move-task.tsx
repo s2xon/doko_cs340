@@ -6,7 +6,7 @@ const SERVER = "http://localhost:8010"; // Change as necessary
 
 
 // Uses the movetask POST api in the go server to increment the StatId of task when clicked on UI
-async function moveTask (taskId: number) {
+export async function moveTask (taskId: number) {
 
     try {
         // See main.go for server info and available queries

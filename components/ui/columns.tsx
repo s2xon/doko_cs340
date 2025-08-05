@@ -7,15 +7,19 @@
 
 
 
-
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { 
     Statuses,
     Tasks,
     Tags,
     BoardData,
  } from '@/components/interfaces';
+
+ import {
+    moveTask
+ } from '@/app/api/move-task'
+import {BoardContext} from '@/components/context'
+ 
 
 
 
@@ -47,23 +51,36 @@ function StatusColumn ({StatusId, StatusTitle, RelevantTasks} : StatusVars) {
 
 }
 
-function TaskBar ({taskId, title, desc, statId} : Tasks) {
+
+export function TaskBar({ taskId, title, desc, statId }: Tasks) {
+    // CORRECT: Call the hook inside the component's body to get the refresh function
+    const { refreshBoard } = useContext(BoardContext);
+
+    // This is the event handler function
+    const HandleMoveTask = async () => {
+        console.log("current statid:", statId);
+        if ((statId % 3) !== 0) {
+            try {
+                await moveTask(taskId);
+                // Correct: Use the function obtained from the hook
+                refreshBoard(); 
+            } catch (err) {
+                console.error("Error handling task move and refresh:", err);
+            }
+        } else {
+            console.log("grrrr, no moving now.");
+        }
+    };
 
     return (
         <button
-            // onClick={() => HandleMoveTask(taskId)} // Call onMoveTask when button is clicked
+            onClick={HandleMoveTask} // Use the new handler function
             className="w-full bg-black-500 hover:bg-grey-600 text-black font-semibold py-3 px-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
             <span className="text-lg">{title}</span>
             <span className="text-lg">{desc}</span>
         </button>
-
-
-    )
+    );
 }
-
-//     async function HandleMoveTask (taskId: number) {
-        // Create the action to move the task, nd update DB
-//   };
 
 
 export {

@@ -10,6 +10,7 @@ import "fmt"
 import (
     "database/sql"
     "root/models"
+    "log"
 )
 
 
@@ -32,10 +33,11 @@ func GetTasks(db *sql.DB, userID int, boardID int) ([]models.Tasks, error) {
 }
 
 func MoveTasks(db *sql.DB, taskId int) (error) {
-    // db.Exec is used for statements that do not return a result set (like INSERT, UPDATE, DELETE, or a stored procedure that modifies data).
-    _, err := db.Exec("CALL increment_task_status(?)", taskId)
+    _, err := db.Exec("CALL movetask(?)", taskId)
     if err != nil {
+        log.Printf("1: some error: %v", err)
         return fmt.Errorf("failed to increment task status for taskId %d: %w", taskId, err)
+        
     }
     return nil
 

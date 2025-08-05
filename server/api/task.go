@@ -6,6 +6,7 @@ import (
     "strconv"
     "root/queries"
 	"root/store"
+	"log"
 
     "github.com/gorilla/mux"
 )
@@ -22,9 +23,10 @@ func HandleMoveTask(w http.ResponseWriter, r *http.Request) {
 
     // See "/queries/task.go" for the db function.
 	// TODO: Add more specific error handling if you feel like it
-    err = queries.MoveTasks(store.DB, taskId) 
+    err = queries.MoveTasks(store.DB, taskId)
     if err != nil {
         http.Error(w, "Error moving task", http.StatusInternalServerError)
+		log.Printf("2: some error: %v", err)
         return
     }
 	return
