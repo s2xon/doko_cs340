@@ -136,6 +136,7 @@ func main() {
 	r.HandleFunc("/users/{userId}/board/{boardId}", handlers.HandleGetBoardInfo).Methods("GET") // in /api/board.go
 
 	r.HandleFunc("/users/auth", AuthHandler).Methods("POST") // uses function above main() to handle.
+	r.HandleFunc("/movetask/{taskId}", handlers.HandleMoveTask).Methods("POST") // in api/task.go
 
 	// Specifying that the rounter will be handled with CORS middleware.
 	handlerWithCORS := c.Handler(r)

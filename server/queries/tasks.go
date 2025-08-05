@@ -1,4 +1,11 @@
+// Source for figuring out error handling:
+// http://go-database-sql.org/errors.html
+
+
+
 package queries
+
+import "fmt"
 
 import (
     "database/sql"
@@ -21,5 +28,15 @@ func GetTasks(db *sql.DB, userID int, boardID int) ([]models.Tasks, error) {
         tasks = append(tasks, task)
     }
     return tasks, nil
+
+}
+
+func MoveTasks(db *sql.DB, taskId int) (error) {
+    // db.Exec is used for statements that do not return a result set (like INSERT, UPDATE, DELETE, or a stored procedure that modifies data).
+    _, err := db.Exec("CALL increment_task_status(?)", taskId)
+    if err != nil {
+        return fmt.Errorf("failed to increment task status for taskId %d: %w", taskId, err)
+    }
+    return nil
 
 }
