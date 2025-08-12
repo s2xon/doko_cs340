@@ -57,6 +57,7 @@ function StatusColumn ({StatusId, StatusTitle, RelevantTasks} : StatusVars) {
 
 export function TaskBar({ taskId, title, desc, statId }: Tasks) {
     const { refreshBoard } = useContext(BoardContext);
+    console.log(statId)
 
     // This is the event handler function
     const HandleMoveTask = async () => {
@@ -76,7 +77,7 @@ export function TaskBar({ taskId, title, desc, statId }: Tasks) {
         // Optional: Add a confirmation dialog before deleting
         if (window.confirm(`Are you sure you want to delete the task: "${title}"?`)) {
             try {
-                await // deleteTask(taskId);
+                await deleteTask(taskId);
                 refreshBoard();
             } catch (err) {
                 console.error("Error deleting task:", err);
@@ -107,6 +108,7 @@ export function TaskBar({ taskId, title, desc, statId }: Tasks) {
 }
 
 export function AddTask({ statId }: { statId: number }) {
+    console.log("statId:",statId)
     const { refreshBoard } = useContext(BoardContext);
     const [isAdding, setIsAdding] = useState(false);
     const [title, setTitle] = useState("");
@@ -127,7 +129,7 @@ export function AddTask({ statId }: { statId: number }) {
         if (!title.trim()) return; // Do not add empty tasks
 
         try {
-            // await addTask( title, desc, statId );
+            await addTask( title, desc, statId );
             refreshBoard();
             handleCancel(); // Reset the form
         } catch (err) {

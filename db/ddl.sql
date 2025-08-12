@@ -33,7 +33,7 @@ CREATE TABLE Boards (
     title VARCHAR(255) NOT NULL,
     userId INT,
     FOREIGN KEY (userId) REFERENCES Users(userId)
-        ON DELETE NO ACTION ON UPDATE NO ACTION
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Statuses
@@ -42,7 +42,7 @@ CREATE TABLE Statuses (
     title VARCHAR(255) NOT NULL,
     boardId INT,
     FOREIGN KEY (boardId) REFERENCES Boards(boardId)
-        ON DELETE NO ACTION ON UPDATE NO ACTION
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Tasks
@@ -52,7 +52,7 @@ CREATE TABLE Tasks (
     `desc` TEXT,
     statId INT,
     FOREIGN KEY (statId) REFERENCES Statuses(statId)
-        ON DELETE NO ACTION ON UPDATE NO ACTION
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Tags
@@ -68,9 +68,9 @@ CREATE TABLE TaskTags (
     tagId INT NOT NULL,
     PRIMARY KEY (taskId, tagId),
     FOREIGN KEY (taskId) REFERENCES Tasks(taskId)
-        ON DELETE NO ACTION ON UPDATE NO ACTION,
+        ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (tagId) REFERENCES Tags(tagId)
-        ON DELETE NO ACTION ON UPDATE NO ACTION
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Insert sample users

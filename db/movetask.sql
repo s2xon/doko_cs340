@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS movetask;
 DELIMITER //
 
 CREATE PROCEDURE movetask (
-    IN moving_task INT
+    IN p_taskId INT
 )
 BEGIN
 
@@ -19,7 +19,7 @@ BEGIN
     INTO v_current_statId, v_boardId
     FROM Tasks t
     JOIN Statuses s ON t.statId = s.statId
-    WHERE t.taskId = moving_task;
+    WHERE t.taskId = p_taskId;
 
     -- gets the next statId (minimum statId that is greater than current, in board)
     SELECT MIN(s.statId) 
@@ -35,7 +35,7 @@ BEGIN
         -- Update the task's status
         UPDATE Tasks
         SET statId = v_next_statId
-        WHERE taskId = moving_task;
+        WHERE taskId = p_taskId;
     END IF;
     COMMIT;
 END //

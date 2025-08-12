@@ -137,6 +137,8 @@ func main() {
 
 	r.HandleFunc("/users/auth", AuthHandler).Methods("POST") // uses function above main() to handle.
 	r.HandleFunc("/movetask/{taskId}", handlers.HandleMoveTask).Methods("POST") // in api/task.go
+	r.HandleFunc("/addtask", handlers.HandleAddTask).Methods("POST")
+	r.HandleFunc("/deltask/{taskId}", handlers.HandleDeleteTask).Methods("POST")
 
 	// Specifying that the rounter will be handled with CORS middleware.
 	handlerWithCORS := c.Handler(r)

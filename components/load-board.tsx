@@ -45,7 +45,10 @@ export function LoadBoard() {
                         .filter(task => task.statId === status.statId)}
                 />
             ))}
+            <div>
+            </div>
         </div>
+        
     );
 };
 
