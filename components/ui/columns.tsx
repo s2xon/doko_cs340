@@ -1,10 +1,17 @@
 // Citation for the following code:
 // Date: 8 / 4 / 2025
 // Adapted From Google Gemini
+// #1
 // Source URL: https://gemini.google.com/app/d94eaadbeb6b9467
 // Explained that I wanted to create three columns for statuses and buttons for the tasks. Did not provide any code.
 // I adapted the code it provided to what I wanted, mostly copying the html and cn (classNames css). Also helped with 
 // tailwind css in most places...
+// #2
+// Source URL: https://docs.google.com/document/d/1THQupRate-zEV7BZkRuzgwtLZG5ghy87yXRf9o5RaA0/edit?usp=sharing
+// Couldn't find an export option for google ai studio (which is essentially google gemini as a different version),
+// So I pasted the prompt and answer into a doc.
+// To summarize, I provided my current code in columns.tsx and asked it to modify TaskBar so that it creates a form 
+// that a user can modify the task contents with, when the task is clicked. It modified TaskBar as expected.
 
 
 
@@ -55,27 +62,57 @@ function StatusColumn ({StatusId, StatusTitle, RelevantTasks} : StatusVars) {
 }
 
 
-export function TaskBar({ taskId, title, desc, statId }: Tasks) {
-    const { refreshBoard } = useContext(BoardContext);
-    console.log(statId)
 
-    // This is the event handler function
-    const HandleMoveTask = async () => {
-        console.log("current statid:", statId);
+function TaskBar({ taskId, title: initialTitle, desc: initialDesc, statId }: Tasks) {
+    const { refreshBoard } = useContext(BoardContext);
+    const [isEditing, setIsEditing] = useState(false);
+    const [title, setTitle] = useState(initialTitle);
+    const [desc, setDesc] = useState(initialDesc);
+
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleCancel = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsEditing(false);
+        // Reset changes
+        setTitle(initialTitle);
+        setDesc(initialDesc);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!title.trim()) return; // Do not save with an empty title
+
+        try {
+            // await updateTask(taskId, title, desc);
+            refreshBoard();
+            setIsEditing(false); // Exit editing mode
+        } catch (err) {
+            console.error("Error updating task:", err);
+        }
+    };
+
+
+    const HandleMoveTask = async (e: React.MouseEvent) => {
+        e.stopPropagation();
         if ((statId % 3) !== 0) {
             try {
                 await moveTask(taskId);
-                refreshBoard(); 
+                refreshBoard();
             } catch (err) {
                 console.error("Error handling task move and refresh:", err);
             }
         } else {
-            console.log("grrrr, no moving now.");
+            console.log("This task cannot be moved forward.");
         }
     };
-        const HandleDeleteTask = async () => {
-        // Optional: Add a confirmation dialog before deleting
-        if (window.confirm(`Are you sure you want to delete the task: "${title}"?`)) {
+
+    const HandleDeleteTask = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (window.confirm(`Are you sure you want to delete the task: "${initialTitle}"?`)) {
             try {
                 await deleteTask(taskId);
                 refreshBoard();
@@ -85,11 +122,40 @@ export function TaskBar({ taskId, title, desc, statId }: Tasks) {
         }
     };
 
+    if (isEditing) {
+        return (
+            <form onSubmit={handleSubmit} className="w-full p-4 bg-gray-100 rounded-lg shadow-inner">
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Task Title"
+                    className="w-full p-2 mb-2 border-2 border-gray-300 text-black rounded-md focus:outline-none focus:border-blue-500"
+                />
+                <textarea
+                    value={desc}
+                    onChange={(e) => setDesc(e.target.value)}
+                    placeholder="Task Description"
+                    className="w-full p-2 mb-2 border-2 border-gray-300 text-black rounded-md focus:outline-none focus:border-blue-500"
+                    rows={3}
+                />
+                <div className="flex justify-end space-x-2">
+                    <button type="button" onClick={handleCancel} className="px-4 py-2 font-semibold text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">
+                        Cancel
+                    </button>
+                    <button type="submit" className="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600">
+                        Save
+                    </button>
+                </div>
+            </form>
+        );
+    }
+
     return (
-        <div className="w-full bg-gray-200 text-black font-semibold py-3 px-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-200 ease-in-out">
+        <div onClick={handleEditClick} className="w-full bg-gray-200 text-black font-semibold py-3 px-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-200 ease-in-out cursor-pointer">
             <div className="flex-grow">
-                <span className="text-lg block">{title}</span>
-                <span className="text-sm text-gray-600">{desc}</span>
+                <span className="text-lg block">{initialTitle}</span>
+                <span className="text-sm text-gray-600">{initialDesc}</span>
             </div>
             <div className="flex flex-col space-y-2">
                 <button
