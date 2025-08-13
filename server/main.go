@@ -134,11 +134,13 @@ func main() {
 	// Each type of call (i.e. get with the URL) is directed to the correlated handler function in "/api" directory
 	r.HandleFunc("/users/{userId}/boards", handlers.HandleGetBoards).Methods("GET") // in /api/board.go
 	r.HandleFunc("/users/{userId}/board/{boardId}", handlers.HandleGetBoardInfo).Methods("GET") // in /api/board.go
+	r.HandleFunc("/gettags/{taskId}", handlers.HandleGetTags).Methods("GET") // in /api/tags.go
 
 	r.HandleFunc("/users/auth", AuthHandler).Methods("POST") // uses function above main() to handle.
 	r.HandleFunc("/movetask/{taskId}", handlers.HandleMoveTask).Methods("POST") // in api/task.go
 	r.HandleFunc("/addtask", handlers.HandleAddTask).Methods("POST")
 	r.HandleFunc("/deltask/{taskId}", handlers.HandleDeleteTask).Methods("POST")
+	r.HandleFunc("/deltag/{taskId}/{tagId}", handlers.HandleDeleteTag).Methods("POST")
 
 	r.HandleFunc("/updatetask", handlers.HandleUpdateTask).Methods("PUT")
 

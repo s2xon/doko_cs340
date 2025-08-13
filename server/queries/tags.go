@@ -19,6 +19,8 @@ package queries
 import (
     "database/sql"
     "root/models"
+    "log"
+    "fmt"
 )
 
 
@@ -37,5 +39,36 @@ func GetTags(db *sql.DB, userID int, boardID int) ([]models.Tags, error) {
         tags = append(tags, tag)
     }
     return tags, nil
+
+}
+
+func GetTagsV2(db *sql.DB, taskId int) ([]models.Tags, error) {
+
+    rows, err := db.Query("CALL gettags(?)", taskId)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var tags []models.Tags
+    for rows.Next() {
+        var tag models.Tags
+        err := rows.Scan(&tag.TagId, &tag.Title, &tag.Color)
+        if err != nil {return nil, err}
+        tags = append(tags, tag)
+    }
+    return tags, nil
+
+}
+
+
+func DeleteTag(db *sql.DB, taskId int, tagId int) (error) {
+    _, err := db.Exec("CALL deletetag(?, ?)", taskId, tagId)
+    if err != nil {
+        log.Printf("1: some error: %v", err)
+        return fmt.Errorf("failed to tag for taskId %d: %w", taskId, err)
+        
+    }
+    return nil
 
 }

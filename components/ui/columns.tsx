@@ -12,6 +12,10 @@
 // So I pasted the prompt and answer into a doc.
 // To summarize, I provided my current code in columns.tsx and asked it to modify TaskBar so that it creates a form 
 // that a user can modify the task contents with, when the task is clicked. It modified TaskBar as expected.
+// #3
+// Source URL: https://docs.google.com/document/d/1HyAEPpN7NT2lcIdAV4xYI6NHNb5b6t2gYTXCKdJCems/edit?usp=sharing
+// Prompted that I wanted "Tags" for each task below the task description, loading the color, and a button where I could
+// implement a delete api call. It modified the code as expected. 
 
 
 
@@ -27,9 +31,9 @@ import {moveTask} from '@/app/api/move-task'
 import {addTask} from '@/app/api/add-task'
 import {deleteTask} from '@/app/api/delete-task'
 import {updateTask} from '@/app/api/update-task'
+import {getTags} from '@/app/api/load-tags'
+import {deleteTag} from '@/app/api/delete-tag'
 import {BoardContext} from '@/components/context'
-
-
 
 
 interface StatusVars {
@@ -60,118 +64,6 @@ function StatusColumn ({StatusId, StatusTitle, RelevantTasks} : StatusVars) {
 
     )
 
-}
-
-
-
-function TaskBar({ taskId, title: initialTitle, desc: initialDesc, statId }: Tasks) {
-    const { refreshBoard } = useContext(BoardContext);
-    const [isEditing, setIsEditing] = useState(false);
-    const [title, setTitle] = useState(initialTitle);
-    const [desc, setDesc] = useState(initialDesc);
-
-    const handleEditClick = () => {
-        setIsEditing(true);
-    };
-
-    const handleCancel = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsEditing(false);
-        // Reset changes
-        setTitle(initialTitle);
-        setDesc(initialDesc);
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (!title.trim()) return; // Do not save with an empty title
-
-        try {
-            await updateTask(title, desc, taskId);
-            refreshBoard();
-            setIsEditing(false); // Exit editing mode
-        } catch (err) {
-            console.error("Error updating task:", err);
-        }
-    };
-
-
-    const HandleMoveTask = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if ((statId % 3) !== 0) {
-            try {
-                await moveTask(taskId);
-                refreshBoard();
-            } catch (err) {
-                console.error("Error handling task move and refresh:", err);
-            }
-        } else {
-            console.log("This task cannot be moved forward.");
-        }
-    };
-
-    const HandleDeleteTask = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (window.confirm(`Are you sure you want to delete the task: "${initialTitle}"?`)) {
-            try {
-                await deleteTask(taskId);
-                refreshBoard();
-            } catch (err) {
-                console.error("Error deleting task:", err);
-            }
-        }
-    };
-
-    if (isEditing) {
-        return (
-            <form onSubmit={handleSubmit} className="w-full p-4 bg-gray-100 rounded-lg shadow-inner">
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Task Title"
-                    className="w-full p-2 mb-2 border-2 border-gray-300 text-black rounded-md focus:outline-none focus:border-blue-500"
-                />
-                <textarea
-                    value={desc}
-                    onChange={(e) => setDesc(e.target.value)}
-                    placeholder="Task Description"
-                    className="w-full p-2 mb-2 border-2 border-gray-300 text-black rounded-md focus:outline-none focus:border-blue-500"
-                    rows={3}
-                />
-                <div className="flex justify-end space-x-2">
-                    <button type="button" onClick={handleCancel} className="px-4 py-2 font-semibold text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">
-                        Cancel
-                    </button>
-                    <button type="submit" className="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600">
-                        Save
-                    </button>
-                </div>
-            </form>
-        );
-    }
-
-    return (
-        <div onClick={handleEditClick} className="w-full bg-gray-200 text-black font-semibold py-3 px-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-200 ease-in-out cursor-pointer">
-            <div className="flex-grow">
-                <span className="text-lg block">{initialTitle}</span>
-                <span className="text-sm text-gray-600">{initialDesc}</span>
-            </div>
-            <div className="flex flex-col space-y-2">
-                <button
-                    onClick={HandleMoveTask}
-                    className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    Move
-                </button>
-                <button
-                    onClick={HandleDeleteTask}
-                    className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
-                    Delete
-                </button>
-            </div>
-        </div>
-    );
 }
 
 export function AddTask({ statId }: { statId: number }) {
@@ -248,6 +140,176 @@ export function AddTask({ statId }: { statId: number }) {
 }
 
 
+interface TaskTagsProps {
+    taskId: number;
+}
+
+function TaskTags({ taskId }: TaskTagsProps) {
+    const [tags, setTags] = useState<Tags[]>([]);
+    const { refreshBoard } = useContext(BoardContext); // To refresh data after a change
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const fetchedTags = await getTags(taskId);
+                setTags(fetchedTags);
+            } catch (error) {
+                console.error("Failed to fetch tags:", error);
+            }
+        };
+
+        fetchTags();
+    }, [taskId]);
+
+    const handleDeleteTag = async (tagId: number, e: React.MouseEvent) => {
+        e.stopPropagation(); // Prevent the click from triggering the task's edit mode
+        if (window.confirm("Are you sure you want to remove this tag?")) {
+            try {
+                await deleteTag(taskId, tagId);
+                setTags(currentTags => currentTags.filter(tag => tag.tagId !== tagId));
+            } catch (error) {
+                console.error("Failed to delete tag:", error);
+            }
+        }
+    };
+
+    if (tags === null) {
+        return null; // Don't render anything if there are no tags
+    }
+
+    return (
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+            {tags.map(tag => (
+                <div
+                    key={tag.tagId}
+                    className="flex items-center rounded-full px-3 py-1 text-sm font-semibold"
+                    style={{ backgroundColor: tag.color, color: 'white' }}
+                >
+                    <span>{tag.title}</span>
+                    <button
+                        onClick={(e) => handleDeleteTag(tag.tagId, e)}
+                        className="ml-2 text-white font-bold hover:text-gray-200"
+                        aria-label={`Remove ${tag.title} tag`}
+                    >
+                        &times;
+                    </button>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+
+function TaskBar({ taskId, title: initialTitle, desc: initialDesc, statId }: Tasks) {
+    const { refreshBoard } = useContext(BoardContext);
+    const [isEditing, setIsEditing] = useState(false);
+    const [title, setTitle] = useState(initialTitle);
+    const [desc, setDesc] = useState(initialDesc);
+
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleCancel = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsEditing(false);
+        setTitle(initialTitle);
+        setDesc(initialDesc);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!title.trim()) return;
+
+        try {
+            await updateTask(title, desc, taskId);
+            refreshBoard();
+            setIsEditing(false);
+        } catch (err) {
+            console.error("Error updating task:", err);
+        }
+    };
+
+    const HandleMoveTask = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if ((statId % 3) !== 0) {
+            try {
+                await moveTask(taskId);
+                refreshBoard();
+            } catch (err) {
+                console.error("Error handling task move and refresh:", err);
+            }
+        } else {
+            console.log("This task cannot be moved forward.");
+        }
+    };
+
+    const HandleDeleteTask = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (window.confirm(`Are you sure you want to delete the task: "${initialTitle}"?`)) {
+            try {
+                await deleteTask(taskId);
+                refreshBoard();
+            } catch (err) {
+                console.error("Error deleting task:", err);
+            }
+        }
+    };
+
+    if (isEditing) {
+        return (
+            <form onSubmit={handleSubmit} className="w-full p-4 bg-gray-100 rounded-lg shadow-inner">
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Task Title"
+                    className="w-full p-2 mb-2 border-2 border-gray-300 text-black rounded-md focus:outline-none focus:border-blue-500"
+                />
+                <textarea
+                    value={desc}
+                    onChange={(e) => setDesc(e.target.value)}
+                    placeholder="Task Description"
+                    className="w-full p-2 mb-2 border-2 border-gray-300 text-black rounded-md focus:outline-none focus:border-blue-500"
+                    rows={3}
+                />
+                <div className="flex justify-end space-x-2">
+                    <button type="button" onClick={handleCancel} className="px-4 py-2 font-semibold text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">
+                        Cancel
+                    </button>
+                    <button type="submit" className="px-4 py-2 font-semibold text-white bg-green-500 rounded-md hover:bg-green-600">
+                        Save
+                    </button>
+                </div>
+            </form>
+        );
+    }
+
+    return (
+        <div onClick={handleEditClick} className="w-full bg-gray-200 text-black py-3 px-4 rounded-lg shadow-md flex justify-between items-start transition-all duration-200 ease-in-out cursor-pointer">
+            <div className="flex-grow">
+                <span className="text-lg font-semibold block">{initialTitle}</span>
+                <span className="text-sm text-gray-600">{initialDesc}</span>
+                
+                <TaskTags taskId={taskId} />
+
+            </div>
+            <div className="flex flex-col space-y-2 ml-4">
+                <button
+                    onClick={HandleMoveTask}
+                    className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    Move
+                </button>
+                <button
+                    onClick={HandleDeleteTask}
+                    className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
+                    Delete
+                </button>
+            </div>
+        </div>
+    );
+}
 
 
 
