@@ -71,3 +71,16 @@ func DeleteTasks(db *sql.DB, taskId int) (error) {
     return nil
 
 }
+
+
+func UpdateTasks(db *sql.DB, taskId int, title string, desc string) (error) {
+
+    _, err := db.Exec("CALL updatetask(?, ?, ?)", taskId, title, desc)
+    if err != nil {
+        log.Printf("1: some error: %v", err)
+        return fmt.Errorf("failed to add task for statId %d: %w", taskId, err)
+        
+    }
+    return nil
+
+}

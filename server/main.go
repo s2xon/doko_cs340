@@ -140,6 +140,8 @@ func main() {
 	r.HandleFunc("/addtask", handlers.HandleAddTask).Methods("POST")
 	r.HandleFunc("/deltask/{taskId}", handlers.HandleDeleteTask).Methods("POST")
 
+	r.HandleFunc("/updatetask", handlers.HandleUpdateTask).Methods("PUT")
+
 	// Specifying that the rounter will be handled with CORS middleware.
 	handlerWithCORS := c.Handler(r)
 

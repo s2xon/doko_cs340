@@ -26,6 +26,7 @@ import {
 import {moveTask} from '@/app/api/move-task'
 import {addTask} from '@/app/api/add-task'
 import {deleteTask} from '@/app/api/delete-task'
+import {updateTask} from '@/app/api/update-task'
 import {BoardContext} from '@/components/context'
 
 
@@ -87,7 +88,7 @@ function TaskBar({ taskId, title: initialTitle, desc: initialDesc, statId }: Tas
         if (!title.trim()) return; // Do not save with an empty title
 
         try {
-            // await updateTask(taskId, title, desc);
+            await updateTask(title, desc, taskId);
             refreshBoard();
             setIsEditing(false); // Exit editing mode
         } catch (err) {

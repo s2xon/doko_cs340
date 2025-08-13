@@ -82,3 +82,31 @@ func HandleDeleteTask(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func HandleUpdateTask(w http.ResponseWriter, r *http.Request) {
+
+    // data is passed via packet content rather than url
+    var reqData struct {
+		TaskId int `json:"taskId"`
+        Title string `json:"title"`
+        Desc string `json:"desc"`
+	}
+
+    // Decode request body
+	if err1 := json.NewDecoder(r.Body).Decode(&reqData); err1 != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+    // log.Printf("2: some error: %d", reqData.StatId)
+    // log.Printf("2: some error: %s", reqData.Title)
+    // log.Printf("2: some error: %s", reqData.Desc)
+
+    // See "/queries/task.go" for the db function.
+    err := queries.UpdateTasks(store.DB, reqData.TaskId, reqData.Title, reqData.Desc)
+    if err != nil {
+        http.Error(w, "Error editing task", http.StatusInternalServerError)
+		log.Printf("2: some error: %v", err)
+        return
+    }
+	return
+}
+
