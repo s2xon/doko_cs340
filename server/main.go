@@ -152,6 +152,6 @@ func main() {
 	// Specifying that the rounter will be handled with CORS middleware.
 	handlerWithCORS := c.Handler(r)
 
-	// Middleware serves from port 8010, logs failure.
+	// Middleware serves from port 8019, logs failure.
 	log.Fatal(http.ListenAndServe(":8019", handlerWithCORS))
 }
