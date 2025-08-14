@@ -2,7 +2,7 @@
 // Referenced this for developing:
 // https://www.freecodecamp.org/news/how-to-consume-rest-apis-in-react/
 
-const SERVER = "http://classwork.engr.oregonstate.edu:8019"; // Change as necessary
+const SERVER = "http://classwork.engr.oregonstate.edu:43520"; // Change as necessary
 
 /* 
 The idea for this function is to provide the "details" 

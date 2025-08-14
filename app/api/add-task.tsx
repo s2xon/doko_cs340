@@ -1,7 +1,7 @@
 // Referenced this for developing:
 // https://www.freecodecamp.org/news/how-to-consume-rest-apis-in-react/
 
-const SERVER = "http://classwork.engr.oregonstate.edu:8019"; // Change as necessary
+const SERVER = "http://classwork.engr.oregonstate.edu:43520"; // Change as necessary
 
 import { Tasks } from "@/components/interfaces";
 

@@ -81,7 +81,7 @@ func main() {
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{
-			"http://classwork.engr.oregonstate.edu:3004",
+			"http://classwork.engr.oregonstate.edu:3617",
 			"http://localhost:3000",
 		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -153,5 +153,5 @@ func main() {
 	handlerWithCORS := c.Handler(r)
 
 	// Middleware serves from port 8010, logs failure.
-	log.Fatal(http.ListenAndServe(":8019", handlerWithCORS))
+	log.Fatal(http.ListenAndServe(":43520", handlerWithCORS))
 }

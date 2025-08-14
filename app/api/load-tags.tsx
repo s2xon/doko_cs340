@@ -1,4 +1,4 @@
-const SERVER = "http://localhost:8019";
+const SERVER = "http://classwork.engr.oregonstate.edu:43520";
 
 export async function getTags(taskId: number) {
   console.log(taskId);

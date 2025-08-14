@@ -1,4 +1,4 @@
-const SERVER = "http://classwork.engr.oregonstate.edu:8019"; // Change as necessary
+const SERVER = "http://classwork.engr.oregonstate.edu:43520"; // Change as necessary
 
 import { Tasks } from "@/components/interfaces";
 

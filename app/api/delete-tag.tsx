@@ -1,4 +1,4 @@
-const SERVER = "http://classwork.engr.oregonstate.edu:8019"; // Change as necessary
+const SERVER = "http://classwork.engr.oregonstate.edu:43520"; // Change as necessary
 
 // Uses the movetask POST api in the go server to increment the StatId of task when clicked on UI
 export async function deleteTag(taskId: number, tagId: number) {
