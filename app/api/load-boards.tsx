@@ -1,6 +1,9 @@
-// Creating the fetch calls for loading a User's boards.
-// Referenced this for developing:
-// https://www.freecodecamp.org/news/how-to-consume-rest-apis-in-react/
+// Citation for the following function:
+// Date: 8/2/2025
+// Based on How to Consume REST APIs in React
+// Used for understanding and developing the following api calls. Made significant
+// changes depending on what the functions used for (for all api functions).
+// Source URL: https://www.freecodecamp.org/news/how-to-consume-rest-apis-in-react/
 
 const SERVER = "http://classwork.engr.oregonstate.edu:43520"; // Change as necessary
 

@@ -2,7 +2,7 @@
 // Date: 8 / 4 / 2025
 // Adapted From Google Gemini
 // #1
-// Source URL: https://gemini.google.com/app/d94eaadbeb6b9467
+// Source URL: https://g.co/gemini/share/c4bc30f4a2b4
 // Explained that I wanted to create three columns for statuses and buttons for the tasks. Did not provide any code.
 // I adapted the code it provided to what I wanted, mostly copying the html and cn (classNames css). Also helped with 
 // tailwind css in most places...

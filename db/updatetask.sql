@@ -1,3 +1,10 @@
+-- ---------------------------------------------------------------------------
+-- Matthew Martin
+-- CS340 Summer 2025
+-- Group 49
+-- doko
+-- All code was done by me.
+-- ---------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS updatetask;
 
 DELIMITER //

@@ -1,10 +1,28 @@
+// Citations for the following code:
+// Date: 7/30/2025 - 8/4/2025
+// #1 
+// Based on Go: Connecting to SQL Server
+// Used for Figuring out how to connect to the SQL database. Referenced it when 
+// creating the .env file and the "cfg".
+// Source URL: https://www.sqlservertutorial.net/go-sql-server/go-connect-sql-server/
+// #2
+// Based on Go HTTP Docs
+// Used for the router (r) and making handling API calls.
+// Source URL: https://pkg.go.dev/net/http
+// #3
+// Based on How to Enable CORS in GoLang
+// Used for implementing CORS (after I realized it was necessary). Used for the "c"
+// variable within the main function. 
+// Source URL: https://www.delftstack.com/howto/go/golang-cors/
+
+
+
 package main
 
 import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	// "time"
 	"log"
 	"net/http"
 	"os"
@@ -17,15 +35,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
-
-// var db *sql.DB
-
-/*
-type Users struct {
-	UserId int `json:"userId"`
-	name string `json:"name"`
-}
-*/
 
 func AuthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -111,17 +120,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// // Set the maximum number of concurrently open connections.
-	// store.DB.SetMaxOpenConns(25)
-
-	// // Set the maximum number of idle connections in the pool.
-	// store.DB.SetMaxIdleConns(25)
-
-	// // Set the maximum lifetime of a connection.
-	// store.DB.SetConnMaxLifetime(5 * time.Minute)
-
-	// // Set the maximum idle time of a connection.
-	// store.DB.SetConnMaxIdleTime(5 * time.Minute)
 
 	// The following code is just testing the connection, along with a test SELECT.
 	pingErr := store.DB.Ping()
@@ -134,6 +132,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// For testing to see if your truly connected. Should print out the users.
 	for rows.Next() {
 		var id int
 		var name string
@@ -164,6 +163,6 @@ func main() {
 	// Specifying that the rounter will be handled with CORS middleware.
 	handlerWithCORS := c.Handler(r)
 
-	// Middleware serves from port 8010, logs failure.
+	// Middleware serves from port 43520, logs failure.
 	log.Fatal(http.ListenAndServe(":43520", handlerWithCORS))
 }

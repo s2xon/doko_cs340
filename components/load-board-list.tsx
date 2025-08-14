@@ -1,3 +1,17 @@
+// Citations for the following code:
+// #1
+// Date: 7/31/2025
+// Based on How to Consume REST APIs in React – a Beginner's Guide
+// Used for understanding how to use the "useEffect" react feature to call api functions and load relevant board data.
+// Source URL: https://www.freecodecamp.org/news/how-to-consume-rest-apis-in-react/
+// Citations for the following code:
+// #2
+// Date: 7/31/2025
+// Based on TypeScript Error Type Handling in Try-Catch Blocks
+// Used for debugging.
+// Source URL: https://www.convex.dev/typescript/optimization/typescript-catch-error-type
+
+
 "use client"
 
 import Link from "next/link";
@@ -16,27 +30,6 @@ import React, { useState, useEffect } from 'react';
 import { getBoards } from '@/app/api/load-boards'; // Import the API function
 import { Board } from '@/components/interfaces';
 
-/* 
-Sources:
-- https://www.convex.dev/typescript/optimization/typescript-catch-error-type
-- https://www.freecodecamp.org/news/how-to-consume-rest-apis-in-react/
-
-*/
-
-
-// This will basically replace current BoardPreview as the list
-// of boards the user has. 
-// Needs to do: 
-// - Retrieve the board list (using getBoards function)
-// - Fill in the table for each board, making sure to push the board number
-// to the dokoProj page in order for it to load the correct data.
-
-
-// interface Board {
-//   BoardId: number;
-//   title: string;
-//   userId: string;
-// }
 
 export function CreateBoardsData ({ userId }: { userId: number }) {
     // State variables, starts with Loading as true.
