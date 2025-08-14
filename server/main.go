@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	// "time"
 	"log"
 	"net/http"
 	"os"
@@ -81,7 +82,7 @@ func main() {
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{
-			"http://classwork.engr.oregonstate.edu:3617",
+			"http://classwork.engr.oregonstate.edu:3620",
 			"http://localhost:3000",
 		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -110,6 +111,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// // Set the maximum number of concurrently open connections.
+	// store.DB.SetMaxOpenConns(25)
+
+	// // Set the maximum number of idle connections in the pool.
+	// store.DB.SetMaxIdleConns(25)
+
+	// // Set the maximum lifetime of a connection.
+	// store.DB.SetConnMaxLifetime(5 * time.Minute)
+
+	// // Set the maximum idle time of a connection.
+	// store.DB.SetConnMaxIdleTime(5 * time.Minute)
 
 	// The following code is just testing the connection, along with a test SELECT.
 	pingErr := store.DB.Ping()
