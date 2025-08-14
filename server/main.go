@@ -78,11 +78,16 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	// middleware to access the DB properly via the frontend.
 	// Specifies perameters for accessing api calls to DB.
+
 	c := cors.New(cors.Options{
-	AllowedOrigins: []string{"http://localhost:3000"}, // Replace with osu url if needed
-	AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	AllowedHeaders: []string{"Content-Type", "Authorization"},
-	Debug: true,
+		AllowedOrigins: []string{
+			"http://classwork.engr.oregonstate.edu:3004",
+			"http://localhost:3000",
+		},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		Debug:            true,
 	})
 
 	var err error
@@ -132,11 +137,11 @@ func main() {
 	r := mux.NewRouter()
 
 	// Each type of call (i.e. get with the URL) is directed to the correlated handler function in "/api" directory
-	r.HandleFunc("/users/{userId}/boards", handlers.HandleGetBoards).Methods("GET") // in /api/board.go
+	r.HandleFunc("/users/{userId}/boards", handlers.HandleGetBoards).Methods("GET")             // in /api/board.go
 	r.HandleFunc("/users/{userId}/board/{boardId}", handlers.HandleGetBoardInfo).Methods("GET") // in /api/board.go
-	r.HandleFunc("/gettags/{taskId}", handlers.HandleGetTags).Methods("GET") // in /api/tags.go
+	r.HandleFunc("/gettags/{taskId}", handlers.HandleGetTags).Methods("GET")                    // in /api/tags.go
 
-	r.HandleFunc("/users/auth", AuthHandler).Methods("POST") // uses function above main() to handle.
+	r.HandleFunc("/users/auth", AuthHandler).Methods("POST")                    // uses function above main() to handle.
 	r.HandleFunc("/movetask/{taskId}", handlers.HandleMoveTask).Methods("POST") // in api/task.go
 	r.HandleFunc("/addtask", handlers.HandleAddTask).Methods("POST")
 	r.HandleFunc("/deltask/{taskId}", handlers.HandleDeleteTask).Methods("POST")
@@ -148,5 +153,5 @@ func main() {
 	handlerWithCORS := c.Handler(r)
 
 	// Middleware serves from port 8010, logs failure.
-	log.Fatal(http.ListenAndServe(":8010", handlerWithCORS))
+	log.Fatal(http.ListenAndServe(":8019", handlerWithCORS))
 }
