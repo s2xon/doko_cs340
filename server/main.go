@@ -113,6 +113,7 @@ func main() {
 	cfg.Net = "tcp"
 	cfg.Addr = os.Getenv("DBHOST")
 	cfg.DBName = os.Getenv("DBNAME")
+	cfg.Params = map[string]string{"multiStatements": "true"} // needed for resetting the db
 
 	// Get a database handle.
 	fmt.Println(cfg.FormatDSN())
@@ -157,6 +158,8 @@ func main() {
 	r.HandleFunc("/addtask", handlers.HandleAddTask).Methods("POST")
 	r.HandleFunc("/deltask/{taskId}", handlers.HandleDeleteTask).Methods("POST")
 	r.HandleFunc("/deltag/{taskId}/{tagId}", handlers.HandleDeleteTag).Methods("POST")
+	r.HandleFunc("/reset", handlers.HandleResetDB).Methods("POST")
+
 
 	r.HandleFunc("/updatetask", handlers.HandleUpdateTask).Methods("PUT")
 
